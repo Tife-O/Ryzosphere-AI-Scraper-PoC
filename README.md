@@ -1,29 +1,26 @@
-# Ryzosphere AI Scraper PoC
+# Ryzosphere AI Scraper (Internship PoC)
 
-A proof-of-concept pipeline that scrapes publicly available agricultural market information and converts it into structured JSON using a large language model.
+A proof-of-concept data pipeline demonstrating an AI-native approach to scraping, structuring, and validating agricultural market data. 
 
-## Why I Built This
+## Application Context
+I built this sandbox project specifically for my Summer 2026 CS Intern application at **The Ryzosphere**. 
 
-I wanted to explore a different approach to web scraping. Instead of relying on complex HTML parsing rules that can easily break when a website changes, this project uses an LLM to interpret scraped content and organize it into a consistent schema.
+To align with your mission of building data infrastructure for the food-and-agriculture ecosystem, this project simulates the exact workflow outlined in the job description: extracting unstructured agricultural data, mapping it to a ground-truth taxonomy using an LLM agent, and safely writing the validated output to a local staging environment.
 
-The project simulates a small data pipeline by collecting information from an agricultural market, validating the output, and saving the structured data locally.
+## Key Features & Alignment
 
-## What It Does
-
-- Scrapes agricultural market pages using `requests` and `BeautifulSoup`
-- Uses a custom User-Agent and rate limiting to avoid overwhelming websites
-- Sends the scraped content to Google's Gemini model for structured extraction
-- Validates the response against a predefined JSON schema
-- Stores validated results in a local staging folder
+- **Responsible Scraping:** Utilizes a custom User-Agent and algorithmic rate limiting (`time.sleep`) to respect target servers, avoiding the overwhelming of local agricultural websites.
+- **Asset-Mapping Taxonomy:** Replaces brittle HTML parsing rules with Google's Gemini 3.5 Flash model to intelligently interpret scraped content and force it into a strict, predefined `schema.json` format.
+- **Safe Staging:** Validates the LLM response against the schema and writes all validated results to a local `staging_output/` directory—never to live systems.
 
 ## Example Output
 
-When the scraper is run, it fetches market information, sends the scraped text to Gemini for structured extraction, validates the result, and saves the output locally.
+When the pipeline runs, it fetches the raw market information, hands it to the AI agent for structuring, and saves the validated JSON.
 
 **Console Output**
 
 ```text
-Fetching data from https://en.wikipedia.org/wiki/Union_Square_Greenmarket...
+Fetching data from [https://en.wikipedia.org/wiki/Union_Square_Greenmarket](https://en.wikipedia.org/wiki/Union_Square_Greenmarket)...
 Respecting rate limits: Sleeping for 2 seconds before request...
 Successfully fetched the page!
 
@@ -36,85 +33,3 @@ Handing raw text over to the AI Agent for structuring...
 }
 
 Success! Validated data written to staging_output/market_data_v1.json
-```
-
-**Generated JSON**
-
-```json
-{
-  "market_name": "Union Square",
-  "location": "Union Square Park, Manhattan, New York City"
-}
-```
-
-## Project Structure
-
-```
-.
-├── scraper.py          # Main pipeline
-├── schema.json         # Expected JSON format
-├── .env                # Gemini API key
-├── .gitignore          # Allows encrypted info to stay hidden after pushing code to GitHub
-└── README.md
-```
-
-## Technologies
-
-- Python
-- Requests
-- BeautifulSoup
-- Google Gemini API
-- JSON
-- python-dotenv
-
-## Running the Project
-
-1. Clone the repository
-
-```bash
-git clone https://github.com/Tife-O/Ryzosphere-AI-Scraper-PoC.git
-cd Ryzosphere-AI-Scraper-PoC
-```
-
-2. Create a virtual environment
-
-```bash
-python -m venv venv
-```
-
-Windows
-
-```bash
-venv\Scripts\activate
-```
-
-macOS/Linux
-
-```bash
-source venv/bin/activate
-```
-
-3. Install dependencies
-
-```bash
-pip install requests beautifulsoup4 google-genai python-dotenv
-```
-
-4. Create a `.env` file
-
-```text
-GEMINI_API_KEY=your_api_key_here
-```
-
-5. Run the scraper
-
-```bash
-python scraper.py
-```
-
-## Future Improvements
-
-- Support scraping multiple markets
-- Add retry logic for failed requests
-- Export results to a database
-- Add automated tests
