@@ -1,0 +1,27 @@
+{
+    "type": "object",
+    "properties": {
+        "market_name": {
+            "type": "string",
+            "description": "The official name of the farmers market."
+        },
+        "location": {
+            "type": "string",
+            "description": "The borough, city, or street address."
+        },
+        "operating_season": {
+            "type": "string",
+            "description": "Months or days the market is open."
+        },
+        "accepted_payments": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Types of payment accepted, such as SNAP, EBT, Cash, or Credit."
+        },
+        "has_fresh_produce": {
+            "type": "boolean",
+            "description": "True if the market sells fresh fruits or vegetables."
+        }
+    },
+    "required": ["market_name", "location"]
+}
